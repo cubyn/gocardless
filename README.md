@@ -12,7 +12,7 @@ Supports the redirection flow API at the time of writing.
 
 ### 1. Instantiate GoCardless
 
-```javasript
+```javascript
 var GoCardless = require('GoCardless');
 
 var config = {
@@ -39,14 +39,16 @@ goCardless.startRedirectionFlow(description, sessionToken, successUrl)
 
 this logs : 
 ```
-{ id: 'RE00001VVPM6J4BQT82TZMFBC6QCPPBR',
-     description: 'description',
-     session_token: 'test5',
+{ redirect_flows: 
+   { id: 'RE00001VVBSW46DZSK57ZKK7V654C6T3',
+     description: 'optional description',
+     session_token: 'userSessionToken',
      scheme: null,
-     success_redirect_url: 'http://localhost:3000/gocardless/success',
-     created_at: '2015-10-23T14:22:25.693Z',
-     links: { creditor: 'CR00000Q17V7D4' },
-     redirect_url: 'https://pay-sandbox.gocardless.com/flow/RE00001VVPM5J4BQT82TZMFBC6QCPPBR' } }
+     success_redirect_url: 'http://example.com/gocardless/success',
+     created_at: '2015-10-23T13:52:42.921Z',
+     links: { creditor: 'CR00003Q16V7D3' },
+     redirect_url: 'https://pay-sandbox.gocardless.com/flow/RE00001VVBSW46DZSK57ZKK7V754C6T3' } }
+
 ```
 
 ### 5. Complete redirection flow
