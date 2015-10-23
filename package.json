@@ -9,7 +9,7 @@
   "author": "rory dent",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^2.10.2",
-    "request": "^2.65.0"
+    "bluebird": "2.10.2",
+    "request": "2.65.0"
   }
 }
