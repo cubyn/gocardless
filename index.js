@@ -62,7 +62,7 @@ export default class GoCardless {
         return goCardlessRequest(options);
     }
 
-    compvareRedirectFlow(redirectFlowId, sessionId) {
+    completeRedirectFlow(redirectFlowId, sessionId) {
         var body = {
             "data": {
                 "session_token": sessionId
