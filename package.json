@@ -1,5 +1,5 @@
 {
-  "name": "gocardless",
+  "name": "node-gocardless",
   "version": "0.0.2",
   "description": "NodeJS SDK for gocardless.com API",
   "main": "index.js",
