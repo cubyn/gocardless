@@ -1,14 +1,14 @@
 var Promise = require('bluebird');
 var request = require('request');
-var moment = require('moment');
-var pRequest = function (options) {
-    return new Promise(function (resolve, reject) {
-        request(options, function (err, response, body) {
+
+var pRequest = function(options) {
+    return new Promise(function(resolve, reject) {
+        request(options, function(err, response, body) {
             if (err) reject(err);
             resolve({ response: response, body: body });
         });
     });
-}
+};
 
 function buildOptions(token, endPoint, path, method, body = {}) {
     return {
@@ -27,7 +27,7 @@ function buildOptions(token, endPoint, path, method, body = {}) {
 
 function goCardlessRedirectRequest(options) {
     return pRequest(options)
-        .then(function (response) {
+        .then(function(response) {
             if (!response.body.redirect_flows) throw response.body;
             else return response.body;
         });
@@ -38,6 +38,13 @@ function goCardlessRequest(options) {
         .then((response) => {
             return response
         });
+}
+
+function yyyymmdd(date) {
+    var yyyy = date.getFullYear().toString();
+    var mm = (date.getMonth() + 1).toString(); // getMonth() is zero-based
+    var dd = date.getDate().toString();
+    return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]); // padding
 }
 
 export default class GoCardless {
@@ -91,13 +98,13 @@ export default class GoCardless {
      * @param metadata any data up to 3 pairs of key-values
      * @param internalReference your own internal reference
      */
-    createPayment(mandateID, amount, currency = "EUR", charge_date = null, description = null, metadata = null, internalReference = null) {
+    createPayment(mandateID, amount, currency = "EUR", chargeDate = null, description = null, metadata = null, internalReference = null) {
 
         const body = {
             'payments': {
                 'amount': amount,
                 'currency': currency,
-                'charge_date': moment(charge_date, 'YYYY-MM-DD'),
+                'charge_date': yyyymmdd(chargeDate),
                 'reference': internalReference || '',
                 'metadata': metadata,
                 'description': description || '',
@@ -106,8 +113,8 @@ export default class GoCardless {
                 }
             }
         };
-        const path='/payments';
-        const method='POST';
+        const path = '/payments';
+        const method = 'POST';
         const options = buildOptions(this.token, this.endPoint, path, method, body);
         return goCardlessRequest(options);
     }
@@ -118,8 +125,8 @@ export default class GoCardless {
      * @param id
      */
     getPayment(id) {
-        const path=`/payments?${id}`;
-        const method='GET';
+        const path = `/payments?${id}`;
+        const method = 'GET';
         const options = buildOptions(this.token, this.endPoint, path, method, null);
         return goCardlessRequest(options);
     }
@@ -130,8 +137,8 @@ export default class GoCardless {
      * @param queryString
      */
     queryPayments(queryString) {
-        const path=`/payments?${queryString}`;
-        const method='GET';
+        const path = `/payments?${queryString}`;
+        const method = 'GET';
         const options = buildOptions(this.token, this.endPoint, path, method, null);
         return goCardlessRequest(options);
     }
@@ -143,8 +150,8 @@ export default class GoCardless {
      * @param metadata
      */
     updatePayment(id, metadata) {
-        const path=`/payments?${id}`;
-        const method='PUT';
+        const path = `/payments?${id}`;
+        const method = 'PUT';
         const options = buildOptions(this.token, this.endPoint, path, method, metadata);
         return goCardlessRequest(options);
     }
@@ -156,8 +163,8 @@ export default class GoCardless {
      * @param metadata
      */
     cancelPayment(id, metadata) {
-        const path=`/payments?${id}/actions/cancel`;
-        const method='POST';
+        const path = `/payments?${id}/actions/cancel`;
+        const method = 'POST';
         const options = buildOptions(this.token, this.endPoint, path, method, metadata);
         return goCardlessRequest(options);
     }
@@ -169,8 +176,8 @@ export default class GoCardless {
      * @param metadata
      */
     retryPayment(id, metadata) {
-        const path=`/payments?${id}/actions/retry`;
-        const method='POST';
+        const path = `/payments?${id}/actions/retry`;
+        const method = 'POST';
         const options = buildOptions(this.token, this.endPoint, path, method, metadata);
         return goCardlessRequest(options);
     }
