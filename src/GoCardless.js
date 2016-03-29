@@ -57,6 +57,18 @@ export default class GoCardless {
         this.token = config.token;
     }
 
+    /**
+     * Generic GC API request
+     * @param  {string} method "POST", "GET", "PUT", "DELETE"
+     * @param  {string} path
+     * @param  {mixed} body
+     * @return {Promise<response>}
+     */
+    request(method, path, body = null) {
+        let options = buildOptions(this.token, this.endPoint, path, method, body);
+        return goCardlessRequest(options);
+    }
+
     startRedirectFlow(description, sessionId, succesRedirectUrl) {
         let body = {
             "redirect_flows": {
