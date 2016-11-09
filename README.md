@@ -31,7 +31,7 @@ var description = 'optional description';
 var sessionToken = 'userSessionToken';
 var successUrl = 'http://example.com/gocardless/success';
 
-goCardless.startRedirectionFlow(description, sessionToken, successUrl)
+goCardless.startRedirectFlow(description, sessionToken, successUrl)
 	.then(function (response){
 		console.log(response);
 	});
