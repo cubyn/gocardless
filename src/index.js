@@ -1,3 +1,3 @@
-import GoCardless from './GoCardless.js';
+import GoCardless from './GoCardless';
 
 module.exports = GoCardless;
