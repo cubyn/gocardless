@@ -1,11 +1,11 @@
 var Promise = require('bluebird');
 var request = require('request');
 
-var pRequest = function(options) {
-    return new Promise(function(resolve, reject) {
-        request(options, function(err, response, body) {
+var pRequest = function (options) {
+    return new Promise((resolve, reject) => {
+        request(options, (err, response, body) => {
             if (err) reject(err);
-            resolve({ response: response, body: body });
+            resolve({ response, body });
         });
     });
 };
@@ -14,37 +14,34 @@ function buildOptions(token, endPoint, path, method, body = {}) {
     return {
         uri: endPoint + path,
         headers: {
-            Authorization: "Bearer " + token,
-            "GoCardless-Version": "2015-07-06",
-            "Accept": "application/json",
-            "Content-Type": "application/json"
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/json',
+            'GoCardless-Version': '2015-07-06',
+            'Content-Type': 'application/json'
         },
-        body: body,
-        json: true,
-        method: method
-    }
+        body,
+        method,
+        json: true
+    };
 }
 
 function goCardlessRedirectRequest(options) {
     return pRequest(options)
-        .then(function(response) {
+        .then((response) => {
             if (!response.body.redirect_flows) throw response.body;
             else return response.body;
         });
 }
 
 function goCardlessRequest(options) {
-    return pRequest(options)
-        .then((response) => {
-            return response
-        });
+    return pRequest(options);
 }
 
 function yyyymmdd(date) {
     var yyyy = date.getFullYear().toString();
     var mm = (date.getMonth() + 1).toString(); // getMonth() is zero-based
     var dd = date.getDate().toString();
-    return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]); // padding
+    return `${yyyy}-${(mm[1] ? mm : `0${mm[0]}`)}-${(dd[1] ? dd : `0${dd[0]}`)}`; // padding
 }
 
 export default class GoCardless {
@@ -65,37 +62,37 @@ export default class GoCardless {
      * @return {Promise<response>}
      */
     request(method, path, body = null) {
-        let options = buildOptions(this.token, this.endPoint, path, method, body);
+        const options = buildOptions(this.token, this.endPoint, path, method, body);
         return goCardlessRequest(options);
     }
 
     startRedirectFlow(description, sessionId, succesRedirectUrl) {
-        let body = {
-            "redirect_flows": {
-                "description": description,
-                "session_token": sessionId,
-                "success_redirect_url": succesRedirectUrl
+        const body = {
+            redirect_flows: {
+                description,
+                session_token: sessionId,
+                success_redirect_url: succesRedirectUrl
             }
         };
-        let path = '/redirect_flows';
-        let options = buildOptions(this.token, this.endPoint, path, 'POST', body);
+        const path = '/redirect_flows';
+        const options = buildOptions(this.token, this.endPoint, path, 'POST', body);
         return goCardlessRedirectRequest(options);
     }
 
     getRedirectFlow(redirectFlowId) {
-        let path = '/redirect_flows/' + redirectFlowId;
-        let options = buildOptions(this.token, this.endPoint, path, 'GET');
+        const path = `/redirect_flows/${redirectFlowId}`;
+        const options = buildOptions(this.token, this.endPoint, path, 'GET');
         return goCardlessRedirectRequest(options);
     }
 
     completeRedirectFlow(redirectFlowId, sessionId) {
-        let body = {
-            "data": {
-                "session_token": sessionId
+        const body = {
+            data: {
+                session_token: sessionId
             }
         };
-        let path = '/redirect_flows/' + redirectFlowId + '/actions/complete';
-        let options = buildOptions(this.token, this.endPoint, path, 'POST', body);
+        const path = `/redirect_flows/${redirectFlowId}/actions/complete`;
+        const options = buildOptions(this.token, this.endPoint, path, 'POST', body);
         return goCardlessRedirectRequest(options);
     }
 
@@ -110,18 +107,17 @@ export default class GoCardless {
      * @param metadata any data up to 3 pairs of key-values
      * @param internalReference your own internal reference
      */
-    createPayment(mandateID, amount, currency = "EUR", chargeDate = null, description = null, metadata = null, internalReference = null) {
-
+    createPayment(mandateID, amount, currency = 'EUR', chargeDate = null, description = null, metadata = null, internalReference = null) {
         const body = {
-            'payments': {
-                'amount': amount,
-                'currency': currency,
-                'charge_date': yyyymmdd(chargeDate),
-                'reference': internalReference || '',
-                'metadata': metadata,
-                'description': description || '',
-                'links': {
-                    'mandate': mandateID
+            payments: {
+                amount,
+                currency,
+                metadata,
+                charge_date: yyyymmdd(chargeDate),
+                reference: internalReference || '',
+                description: description || '',
+                links: {
+                    mandate: mandateID
                 }
             }
         };
