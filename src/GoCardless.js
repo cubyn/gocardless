@@ -14,10 +14,10 @@ function buildOptions(token, endPoint, path, method, body = {}) {
     return {
         uri: endPoint + path,
         headers: {
-            Authorization: "Bearer " + token,
-            "GoCardless-Version": "2015-07-06",
-            "Accept": "application/json",
-            "Content-Type": "application/json"
+            Authorization: 'Bearer ' + token,
+            'GoCardless-Version': '2015-07-06',
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
         },
         body: body,
         json: true,
@@ -44,7 +44,7 @@ function yyyymmdd(date) {
     var yyyy = date.getFullYear().toString();
     var mm = (date.getMonth() + 1).toString(); // getMonth() is zero-based
     var dd = date.getDate().toString();
-    return yyyy + '-' + (mm[1] ? mm : "0" + mm[0]) + '-' + (dd[1] ? dd : "0" + dd[0]); // padding
+    return yyyy + '-' + (mm[1] ? mm : '0' + mm[0]) + '-' + (dd[1] ? dd : '0' + dd[0]); // padding
 }
 
 export default class GoCardless {
@@ -71,10 +71,10 @@ export default class GoCardless {
 
     startRedirectFlow(description, sessionId, succesRedirectUrl) {
         let body = {
-            "redirect_flows": {
-                "description": description,
-                "session_token": sessionId,
-                "success_redirect_url": succesRedirectUrl
+            'redirect_flows': {
+                'description': description,
+                'session_token': sessionId,
+                'success_redirect_url': succesRedirectUrl
             }
         };
         let path = '/redirect_flows';
@@ -90,8 +90,8 @@ export default class GoCardless {
 
     completeRedirectFlow(redirectFlowId, sessionId) {
         let body = {
-            "data": {
-                "session_token": sessionId
+            'data': {
+                'session_token': sessionId
             }
         };
         let path = '/redirect_flows/' + redirectFlowId + '/actions/complete';
@@ -110,7 +110,7 @@ export default class GoCardless {
      * @param metadata any data up to 3 pairs of key-values
      * @param internalReference your own internal reference
      */
-    createPayment(mandateID, amount, currency = "EUR", chargeDate = null, description = null, metadata = null, internalReference = null) {
+    createPayment(mandateID, amount, currency = 'EUR', chargeDate = null, description = null, metadata = null, internalReference = null) {
 
         const body = {
             'payments': {
