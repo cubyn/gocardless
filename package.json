@@ -1,12 +1,13 @@
 {
   "name": "node-gocardless",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "NodeJS SDK for gocardless.com API",
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint src",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "npm run lint && babel src/ -d dist/"
+    "build": "babel src/ -d dist/",
+    "prepublish": "npm run lint && npm run build"
   },
   "engine": {
     "node": ">=4"
