@@ -9,7 +9,7 @@
     "build": "babel src/ -d dist/",
     "prepublish": "npm run lint && npm run build"
   },
-  "engine": {
+  "engines": {
     "node": ">=4"
   },
   "author": "Cubyn",
