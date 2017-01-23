@@ -113,7 +113,7 @@ export default class GoCardless {
                 amount,
                 currency,
                 metadata,
-                charge_date: yyyymmdd(chargeDate),
+                charge_date: chargeDate && yyyymmdd(chargeDate),
                 reference: internalReference || '',
                 description: description || '',
                 links: {
