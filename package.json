@@ -1,6 +1,6 @@
 {
   "name": "node-gocardless",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "NodeJS SDK for gocardless.com API",
   "main": "dist/index.js",
   "scripts": {
