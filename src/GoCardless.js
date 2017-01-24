@@ -189,4 +189,16 @@ export default class GoCardless {
         const options = buildOptions(this.token, this.endPoint, path, method, metadata);
         return goCardlessRequest(options);
     }
+
+    /**
+     * retrieves single mandate by id
+     * https://developer.gocardless.com/pro/2015-07-06/#mandates-get-a-single-mandate
+     * @param id
+     */
+    getMandate(id) {
+        const path = `/mandates/${id}`;
+        const method = 'GET';
+        const options = buildOptions(this.token, this.endPoint, path, method, null);
+        return goCardlessRequest(options);
+    }
 }
