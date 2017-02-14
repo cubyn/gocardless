@@ -201,4 +201,16 @@ export default class GoCardless {
         const options = buildOptions(this.token, this.endPoint, path, method, null);
         return goCardlessRequest(options);
     }
+
+    /**
+     * Sends a request for subscription creation
+     * https://developer.gocardless.com/pro/2015-07-06/#subscriptions-create-a-subscription
+     * @param subscriptionData REQUIRED object to subscription data
+     */
+    createSubscription(subscriptionData) {
+        var path = '/subscriptions';
+        var method = 'POST';
+        var options = buildOptions(this.token, this.endPoint, path, method, subscriptionData);
+        return goCardlessRequest(options);
+    }
 }
