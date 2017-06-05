@@ -34,6 +34,7 @@ function goCardlessRedirectRequest(options) {
 }
 
 function goCardlessRequest(options) {
+    if (options.method === 'GET') delete options.body;
     return pRequest(options);
 }
 
